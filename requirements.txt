@@ -4,3 +4,8 @@ jupyter
 tqdm
 vaderSentiment
 pandarallel
+bs4
+requests
+lxml
+itables
+matplotlib
