@@ -8,10 +8,11 @@ tqdm.pandas()
 from bs4 import BeautifulSoup
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import os
+import sys
 
 os.makedirs("classified2", exist_ok=True)
 analyzer = SentimentIntensityAnalyzer()
-files = sorted(glob.glob("data/climate_tweets*.csv"))
+files = sys.argv[1:]
 #print(files)
 pd.set_option('display.max_colwidth', -1)
 
