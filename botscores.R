@@ -2,7 +2,7 @@
 
 library(tweetbotornot2)
 
-Sys.setenv(TWITTER_PAT = "rtweet_token.rds") # twitter API token
+rtweet::rate_limit(rtweet::bearer_token(), "get_timeline")
 
 df = read.csv("data/botscores.csv")
 
@@ -22,7 +22,7 @@ for (i in seq_along(output)) {
   oops <- 0L
 
   ## check rate limit- if < 10 calls remain, sleep until reset
-  print(rl <- rtweet::rate_limit(query = "get_timelines"))
+  print(rl <- rtweet::rate_limit(query = "get_timelines", token=rtweet::bearer_token()))
   while (rl[["remaining"]] < 10L) {
     ## prevent infinite loop
     oops <- oops + 1L
@@ -31,11 +31,11 @@ for (i in seq_along(output)) {
     }
     cat("Sleeping for", round(max(as.numeric(rl[["reset"]], "mins"), 0.5), 1), "minutes...")
     Sys.sleep(max(as.numeric(rl[["reset"]], "secs"), 30))
-    rl <- rtweet::rate_limit(query = "get_timelines")
+    rl <- rtweet::rate_limit(query = "get_timelines", token=rtweet::bearer_token())
   }
 
   ## get bot estimates
-  output[[i]] <- predict_bot(users[[i]])
+  output[[i]] <- predict_bot(users[[i]], token = rtweet::bearer_token())
 
   ## print iteration update
   cat(sprintf("%d / %d (%.f%%)\n", i, length(output), i / length(output) * 100))
