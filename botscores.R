@@ -33,7 +33,7 @@ for (i in seq(1, nrow(ids), 10)) {
   ## print iteration update
   print(rtweet::rate_limit(token, "get_timeline"))
   cat(sprintf("%d / %d (%.f%%)\n", i, nrow(ids), i / nrow(ids) * 100))
-  if (i %% 100 == 0) {
+  if (i %% 100 == 1) {
     save()
   }
 }
