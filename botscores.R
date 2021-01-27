@@ -22,9 +22,13 @@ save = function() {
 }
 
 for (i in 1:nrow(ids)) {
-  output = predict_bot(ids$user_id[i], token = token)
-  output$n_tweets = ids$n_tweets[i]
-  df = rbind(df, output)
+  tryCatch({
+    output = predict_bot(ids$user_id[i], token = token)
+    output$n_tweets = ids$n_tweets[i]
+    df = rbind(df, output)
+  }, error = function(c) {
+    print(paste(ids$user_id[i], "failed"))
+  })
 
   ## print iteration update
   cat(sprintf("%d / %d (%.f%%)\n", i, nrow(ids), i / nrow(ids) * 100))
