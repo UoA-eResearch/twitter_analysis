@@ -12,8 +12,11 @@ ids = ids[!ids$user_id %in% df$user_id,] # Filter out users that have already be
 
 ids$user_id = as.character(ids$user_id)
 
+print("CSVs loaded")
+
 ## convert users vector (user IDs or screen names) a list of 10-user chunks
 users <- chunk_users(ids$user_id, n = 10)
+print("Chunked user vector created")
 
 ## initialize output vector
 output <- vector("list", length(users))
