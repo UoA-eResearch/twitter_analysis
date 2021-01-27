@@ -21,10 +21,10 @@ save = function() {
   write.csv(df, "data/botscores.csv", row.names=F)
 }
 
-for (i in 1:nrow(ids)) {
+for (i in seq(1, nrow(ids), 10)) {
   tryCatch({
-    output = predict_bot(ids$user_id[i], token = token)
-    output$n_tweets = ids$n_tweets[i]
+    output = predict_bot(ids$user_id[i:(i+10)], token = token)
+    output$n_tweets = ids$n_tweets[i:(i+10)]
     df = rbind(df, output)
   }, error = function(c) {
     print(paste(ids$user_id[i], "failed"))
