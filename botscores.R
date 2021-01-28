@@ -12,6 +12,7 @@ ids = ids[!ids$user_id %in% df$user_id,] # Filter out users that have already be
 print("CSVs loaded")
 
 save = function() {
+  df = unique(df)
   df = df[order(-df$n_tweets),] # Order by n_tweets descending
   print(df)
   bots = sum(df$prob_bot > .5, na.rm=T)
@@ -23,8 +24,8 @@ save = function() {
 
 for (i in seq(1, nrow(ids), 10)) {
   tryCatch({
-    output = predict_bot(ids$user_id[i:(i+10)], token = token)
-    output$n_tweets = ids$n_tweets[i:(i+10)]
+    output = predict_bot(ids$user_id[i:(i+9)], token = token)
+    output$n_tweets = ids$n_tweets[i:(i+9)]
     df = rbind(df, output)
   }, error = function(c) {
     print(paste(ids$user_id[i], "failed"))
