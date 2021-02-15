@@ -9,3 +9,7 @@ requests
 lxml
 itables
 matplotlib
+gensim
+nltk
+pyLDAvis==2.1.2
+configparser
