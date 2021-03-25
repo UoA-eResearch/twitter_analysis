@@ -8,6 +8,8 @@ bs4
 requests
 lxml
 itables
+folium
+tabulate
 matplotlib
 gensim
 nltk
