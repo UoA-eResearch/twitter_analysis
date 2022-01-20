@@ -105,3 +105,6 @@ venv.bak/
 
 data
 .gd
+*.csv
+nohup.out
+
