@@ -14276,10 +14276,10 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Load-an-LDA-model-from-file">Load an LDA model from file<a class="anchor-link" href="#Load-an-LDA-model-from-file">&#182;</a></h2>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">gensim</span> <span class="kn">import</span> <span class="n">models</span>
@@ -14289,6 +14289,7 @@ a.anchor-link {
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NUMEXPR_MAX_THREADS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;31&#39;</span>
 <span class="n">pyLDAvis</span><span class="o">.</span><span class="n">enable_notebook</span><span class="p">()</span>
@@ -14304,6 +14305,137 @@ a.anchor-link {
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/home/ubuntu/.local/lib/python3.8/site-packages/ipykernel/ipkernel.py:283: DeprecationWarning: `should_run_async` will not call `transform_cell` automatically in the future. Please pass the result to `transformed_cell` argument and any exception that happen during thetransform in `preprocessing_exc_tuple` in IPython 7.17 and above.
+  and should_run_async(code)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="2017---2019-Tweets,-month-by-month">2017 - 2019 Tweets, month by month<a class="anchor-link" href="#2017---2019-Tweets,-month-by-month">&#182;</a></h1>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">months</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/lda/1719bymonth/months.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;topic-model-vis&#39;</span><span class="p">)</span>
+<span class="n">by_year_prefix</span> <span class="o">=</span> <span class="s2">&quot;data/lda/1719bymonth/&quot;</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting work on 2017-2019, by month&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">months</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">month_year</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">, month </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Now working on </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">month_year</span><span class="p">))</span>
+        <span class="n">dictionary_f</span> <span class="o">=</span> <span class="s2">&quot;/data/twitter_analysis/data/lda/1719bymonth/</span><span class="si">{}</span><span class="s2">.dict&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">corpus_f</span> <span class="o">=</span> <span class="n">by_year_prefix</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">model_f</span> <span class="o">=</span> <span class="n">by_year_prefix</span> <span class="o">+</span> <span class="s1">&#39;models/</span><span class="si">{}</span><span class="s1">.model&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting to prepare visualisation for </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">month_year</span><span class="p">,</span> <span class="n">dictionary_f</span><span class="p">,</span> <span class="n">corpus_f</span><span class="p">,</span> <span class="n">model_f</span><span class="p">))</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="n">build_lda_vis</span><span class="p">(</span><span class="n">dictionary_f</span><span class="p">,</span> <span class="n">corpus_f</span><span class="p">,</span> <span class="n">model_f</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saving </span><span class="si">{}</span><span class="s2"> to JSON&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">month_year</span><span class="p">))</span>
+        <span class="n">pyLDAvis</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="n">by_year_prefix</span> <span class="o">+</span> <span class="s2">&quot;output/</span><span class="si">{}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saving </span><span class="si">{}</span><span class="s2"> to HTML&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">month_year</span><span class="p">))</span>
+        <span class="n">pyLDAvis</span><span class="o">.</span><span class="n">save_html</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="n">by_year_prefix</span> <span class="o">+</span> <span class="s2">&quot;output/</span><span class="si">{}</span><span class="s2">.html&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error occurred while processing </span><span class="si">{}</span><span class="s2">, error was </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">month_year</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/home/ubuntu/.local/lib/python3.8/site-packages/ipykernel/ipkernel.py:283: DeprecationWarning: `should_run_async` will not call `transform_cell` automatically in the future. Please pass the result to `transformed_cell` argument and any exception that happen during thetransform in `preprocessing_exc_tuple` in IPython 7.17 and above.
+  and should_run_async(code)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+
+
+
+
+<div id="f51cb355-d755-47f8-a1c1-f06d250247bf" class="jupyter-widgets jp-OutputArea-output ">
+<script type="text/javascript">
+var element = document.getElementById('f51cb355-d755-47f8-a1c1-f06d250247bf');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "b69f6fa12be949efbbb50985bd6a1b8a", "version_major": 2, "version_minor": 0}
+</script>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>Error occurred while processing 2019, month 9, error was 
+ * Not all rows (distributions) in topic_term_dists sum to 1.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>CPU times: user 2h 18min 48s, sys: 35.4 s, total: 2h 19min 23s
+Wall time: 2h 20min 50s
+</pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14371,9 +14503,9 @@ a.anchor-link {
 
 
 
-<div id="c12fe8f5-2408-4216-862f-9ff7b1ad4d86" class="jupyter-widgets jp-OutputArea-output ">
+<div id="e78c120c-ed91-437d-a528-6b7b94ac5aac" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('c12fe8f5-2408-4216-862f-9ff7b1ad4d86');
+var element = document.getElementById('e78c120c-ed91-437d-a528-6b7b94ac5aac');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "944a7a84339b45fcab4e421f885293c5", "version_major": 2, "version_minor": 0}

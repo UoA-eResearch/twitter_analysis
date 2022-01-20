@@ -14259,7 +14259,7 @@ a.anchor-link {
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
@@ -14280,7 +14280,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
 
 
 
@@ -14298,49 +14298,19 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># linear algebra</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># data processing, CSV file I/O (e.g. pd.read_csv)</span>
 <span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">from</span> <span class="nn">pandarallel</span> <span class="kn">import</span> <span class="n">pandarallel</span>
 <span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="n">tqdm</span><span class="o">.</span><span class="n">pandas</span><span class="p">()</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
-<span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">pandarallel</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nb_workers</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">shm_size_mb</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;classified&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">analyzer</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
-<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;data/climate_tweets*.csv&quot;</span><span class="p">)</span>
-<span class="c1">#print(files)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="s2">&quot;lxml&quot;</span><span class="p">)</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">text_with_emoji</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;text_with_emoji&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">text_with_emoji</span>
-    <span class="n">vs</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">text_with_emoji</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">row</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-    <span class="k">return</span> <span class="n">row</span>
-
-<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">parallel_apply</span><span class="p">(</span><span class="n">classify</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Complete - writing csv&quot;</span><span class="p">)</span>
-    <span class="n">new_filename</span> <span class="o">=</span> <span class="s2">&quot;classified/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">new_filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;data/from_research_API/*.jsonl&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">),</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">files</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 
      </div>
@@ -14359,23 +14329,8 @@ a.anchor-link {
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/home/ubuntu/.virtualenvs/twitter-analysis/lib/python3.7/site-packages/tqdm/_tqdm.py:634: FutureWarning: The Panel class is removed from pandas. Accessing it from the top-level namespace will also be removed in the next version
-  from pandas import Panel
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>WARNING: Progress bar is an experimental feature. This can lead to a considerable performance loss.
-New pandarallel memory created - Size: 4000 MB
-Pandarallel will run on 12 workers
+<pre>1933 data/from_research_API/2013-01-30.jsonl data/from_research_API/2021-06-21.jsonl
 </pre>
 </div>
 </div>
@@ -14387,13 +14342,11 @@ Pandarallel will run on 12 workers
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="c1"># Classify NZ tweets</span>
-<span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;data/nz_tweets_*.csv&quot;</span><span class="p">))</span>
-<span class="n">classify_tweets</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/from_research_API/2013-01-30.jsonl&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
 </pre></div>
 
      </div>
@@ -14404,12 +14357,126 @@ Pandarallel will run on 12 workers
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="c1"># Classify climate change tweets</span>
-<span class="n">classify_tweets</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;/mnt/tweets/climate_tweets/histdaily-20190913T114130/combined.csv&quot;</span><span class="p">)))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>dict_keys([&#39;data&#39;, &#39;includes&#39;, &#39;errors&#39;, &#39;meta&#39;, &#39;__twarc&#39;])</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>{&#39;author_id&#39;: &#39;51828412&#39;,
+ &#39;conversation_id&#39;: &#39;296769715127336961&#39;,
+ &#39;created_at&#39;: &#39;2013-01-30T23:59:48.000Z&#39;,
+ &#39;entities&#39;: {&#39;annotations&#39;: [{&#39;end&#39;: 42,
+                               &#39;normalized_text&#39;: &#39;MN&#39;,
+                               &#39;probability&#39;: 0.908,
+                               &#39;start&#39;: 41,
+                               &#39;type&#39;: &#39;Place&#39;}],
+              &#39;hashtags&#39;: [{&#39;end&#39;: 140, &#39;start&#39;: 126, &#39;tag&#39;: &#39;climatechange&#39;}],
+              &#39;mentions&#39;: [{&#39;end&#39;: 18,
+                            &#39;id&#39;: &#39;22819917&#39;,
+                            &#39;start&#39;: 3,
+                            &#39;username&#39;: &#39;wildlifeaction&#39;},
+                           {&#39;end&#39;: 125,
+                            &#39;id&#39;: &#39;3554721&#39;,
+                            &#39;start&#39;: 121,
+                            &#39;username&#39;: &#39;NWF&#39;}],
+              &#39;urls&#39;: [{&#39;display_url&#39;: &#39;bit.ly/14vlp6k&#39;,
+                        &#39;end&#39;: 116,
+                        &#39;expanded_url&#39;: &#39;http://bit.ly/14vlp6k&#39;,
+                        &#39;start&#39;: 96,
+                        &#39;url&#39;: &#39;http://t.co/tpWX4sCV&#39;}]},
+ &#39;id&#39;: &#39;296769715127336961&#39;,
+ &#39;lang&#39;: &#39;en&#39;,
+ &#39;possibly_sensitive&#39;: False,
+ &#39;public_metrics&#39;: {&#39;like_count&#39;: 0,
+                    &#39;quote_count&#39;: 0,
+                    &#39;reply_count&#39;: 0,
+                    &#39;retweet_count&#39;: 10},
+ &#39;referenced_tweets&#39;: [{&#39;id&#39;: &#39;296733372892475392&#39;, &#39;type&#39;: &#39;retweeted&#39;}],
+ &#39;reply_settings&#39;: &#39;everyone&#39;,
+ &#39;source&#39;: &#39;Twitter for iPhone&#39;,
+ &#39;text&#39;: &#39;RT @wildlifeaction: Moose populations in MN have dropped from 4,000 &#39;
+         &#39;to 100 since the mid 1980s: http://t.co/tpWX4sCV via @NWF &#39;
+         &#39;#climatechange&#39;}
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">tweet</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweet</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;created_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweet</span><span class="p">[</span><span class="s2">&quot;created_at&quot;</span><span class="p">]</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
 </pre></div>
 
      </div>
@@ -14433,12 +14500,12 @@ Pandarallel will run on 12 workers
 
 
 
-<div id="5a0a5206-79d4-42ac-87a2-7eb384556255" class="jupyter-widgets jp-OutputArea-output ">
+<div id="169e96df-9409-44bb-9f8d-57d7f84cf4b7" class="jupyter-widgets jp-OutputArea-output ">
 <script type="text/javascript">
-var element = document.getElementById('5a0a5206-79d4-42ac-87a2-7eb384556255');
+var element = document.getElementById('169e96df-9409-44bb-9f8d-57d7f84cf4b7');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "56c65e664ed34dce9393a9ce8ea8479a", "version_major": 2, "version_minor": 0}
+{"model_id": "a6ab1cf7ae7d4551aa2ac179e37be167", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -14450,33 +14517,24 @@ var element = document.getElementById('5a0a5206-79d4-42ac-87a2-7eb384556255');
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-
-
-
-
-
-<div id="63a0347f-7463-47ad-90d5-386431012432" class="jupyter-widgets jp-OutputArea-output ">
-<script type="text/javascript">
-var element = document.getElementById('63a0347f-7463-47ad-90d5-386431012432');
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "2773bb65a805452b847988830f8bb179", "version_major": 2, "version_minor": 0}
-</script>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>79884202
+</pre>
+</div>
 </div>
 
 </div>
 
 </div>
 
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="n">df</span>
 </pre></div>
 
      </div>
@@ -14484,13 +14542,164 @@ var element = document.getElementById('63a0347f-7463-47ad-90d5-386431012432');
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>neg</th>
+      <th>neu</th>
+      <th>pos</th>
+      <th>compound</th>
+      <th>id</th>
+      <th>created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.0000</td>
+      <td>296769715127336961</td>
+      <td>2013-01-30T23:59:48.000Z</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.000</td>
+      <td>0.738</td>
+      <td>0.262</td>
+      <td>0.5994</td>
+      <td>296769710094168065</td>
+      <td>2013-01-30T23:59:47.000Z</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.230</td>
+      <td>0.628</td>
+      <td>0.141</td>
+      <td>-0.4019</td>
+      <td>296769692549410819</td>
+      <td>2013-01-30T23:59:43.000Z</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.209</td>
+      <td>0.664</td>
+      <td>0.128</td>
+      <td>-0.4019</td>
+      <td>296769668813828097</td>
+      <td>2013-01-30T23:59:37.000Z</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.0000</td>
+      <td>296769618310205440</td>
+      <td>2013-01-30T23:59:25.000Z</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>79884197</th>
+      <td>0.138</td>
+      <td>0.862</td>
+      <td>0.000</td>
+      <td>-0.6800</td>
+      <td>1406763810761940992</td>
+      <td>2021-06-21T00:00:03.000Z</td>
+    </tr>
+    <tr>
+      <th>79884198</th>
+      <td>0.000</td>
+      <td>0.925</td>
+      <td>0.075</td>
+      <td>0.2732</td>
+      <td>1406763802369085440</td>
+      <td>2021-06-21T00:00:01.000Z</td>
+    </tr>
+    <tr>
+      <th>79884199</th>
+      <td>0.000</td>
+      <td>0.949</td>
+      <td>0.051</td>
+      <td>0.2732</td>
+      <td>1406763801865826306</td>
+      <td>2021-06-21T00:00:01.000Z</td>
+    </tr>
+    <tr>
+      <th>79884200</th>
+      <td>0.000</td>
+      <td>0.882</td>
+      <td>0.118</td>
+      <td>0.3400</td>
+      <td>1406763797440782336</td>
+      <td>2021-06-21T00:00:00.000Z</td>
+    </tr>
+    <tr>
+      <th>79884201</th>
+      <td>0.163</td>
+      <td>0.837</td>
+      <td>0.000</td>
+      <td>-0.6486</td>
+      <td>1406763796664881152</td>
+      <td>2021-06-21T00:00:00.000Z</td>
+    </tr>
+  </tbody>
+</table>
+<p>79884202 rows × 6 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;tweets_from_research_API_sentiment2.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
      </div>
